@@ -16,6 +16,8 @@ main(int argc, char *argv[])
 		fprintf(stderr, "Enter a valid music filename\n");
 		return -1;
 	}
+
+	strcpy(filename, argv[2]);
 	free(filename);
 	return 0;
 }
