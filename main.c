@@ -25,6 +25,9 @@ main(int argc, char *argv[])
 		filename[127] = '\0';
 	}
 
+	/* when writing sounds remember these, db(data_bytes) is number_of_samples multiplied by the sizeof whatever type the samples are */
+	/* have a definite duration, for example 2 seconds */
+	/* number_of_samples is sample_rate(normally 44100 by def) multiplied by the duration in seconds */
 	struct WavHeader wav_header = createWav(44100, 1, 16, 0);
 	/* the .wav file creation, pretty easy right? */
 	FILE *fd = fopen(filename, "wb+");
