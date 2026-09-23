@@ -25,15 +25,9 @@ main(int argc, char *argv[])
 		filename[127] = '\0';
 	}
 
-	FILE *wav = fopen(filename, "w");
-	if (!wav)
-	{
-		fprintf(stderr, "Failed to open file. \n");
-		return -1;
-	}
-	fprintf(wav, "Hello World\n");
-	fclose(wav);
+	struct WavHeader *wav_header = (struct WavHeader *)malloc(sizeof(struct WavHeader));
 
-	free(filename);
+	free((void *)wav_header);
+	free((void *)filename);
 	return 0;
 }
