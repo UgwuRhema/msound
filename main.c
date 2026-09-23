@@ -70,5 +70,5 @@ void
 writeToWav(struct WavHeader *wh, FILE *fd, unsigned long num_samples, uint16_t *samples_data, int sample_rate)
 {
 	/* this is a default writer that writes 2 seconds of silence into the .wav file*/
-	fwrite(samples_data, wh->bitsPerSample, num_samples, fd);
+	fwrite(samples_data, wh->bitsPerSample / 8, num_samples, fd);
 }
