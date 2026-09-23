@@ -18,6 +18,9 @@ main(int argc, char *argv[])
 	}
 
 	strcpy(filename, argv[2]);
+	FILE *wav = fopen(filename, "w");
+	fprintf(wav, "Hello World\n");
+	fclose(wav);
 	free(filename);
 	return 0;
 }
