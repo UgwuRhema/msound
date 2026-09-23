@@ -26,7 +26,7 @@ main(int argc, char *argv[])
 	}
 
 	struct WavHeader *wav_header = (struct WavHeader *)malloc(sizeof(struct WavHeader));
-
+	printf("size of WavHeader = %zu\n", sizeof(struct WavHeader));
 	free((void *)wav_header);
 	free((void *)filename);
 	return 0;
