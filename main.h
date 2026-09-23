@@ -28,3 +28,4 @@ struct Fool
 	int alias;
 };
 
+struct WavHeader createWav();
