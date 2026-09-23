@@ -46,6 +46,7 @@ main(int argc, char *argv[])
 	/* let's write the samples, 1 second of absolute silence */
 	writeToWav(&wav_header, fd, samples, num_samples);
 	fclose(fd);
+	free((void *)samples);
 	free((void *)filename);
 	return 0;
 }
