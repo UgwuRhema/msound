@@ -28,7 +28,7 @@ main(int argc, char *argv[])
 	/* when writing sounds remember these, db(data_bytes) is number_of_samples multiplied by the sizeof whatever type the samples are */
 	/* have a definite duration, for example 2 seconds */
 	/* number_of_samples is sample_rate(normally 44100 by def) multiplied by the duration in seconds */
-	struct WavHeader wav_header = createWav(44100, 1, 16, 0);
+	struct WavHeader wav_header = createWav(44100, 1, 16, (44100 * sizeof(uint16_t)));
 	/* the .wav file creation, pretty easy right? */
 	FILE *fd = fopen(filename, "wb+");
 	if (!fd) return -1;
@@ -64,4 +64,11 @@ WavHeader createWav(uint32_t sr, uint16_t nc, uint16_t bps, uint32_t db)
 	header.ChunkSize = 36 + db;
 
 	return header;
+}
+
+void
+writeToWav(struct WavHeader *wh, FILE *fd, unsigned long num_samples, uint16_t *samples_data, int sample_rate)
+{
+	/* this is a default writer that writes 2 seconds of silence into the .wav file*/
+	fwrite(samples_data, wh->bitsPerSample, num_samples, fd);
 }

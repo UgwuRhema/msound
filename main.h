@@ -29,3 +29,4 @@ struct Fool
 };
 
 struct WavHeader createWav(uint32_t, uint16_t, uint16_t, uint32_t);
+void writeToWav(struct WavHeader *, FILE *, unsigned long, uint16_t *, int);
