@@ -30,7 +30,7 @@ main(int argc, char *argv[])
 	size_t num_samples = sample_rate * 1;
 	uint32_t data_bytes = (uint32_t)(num_samples * sizeof(uint16_t));
 
-	uint16_t *samples = (uint64_t *)calloc(num_samples, sizeof(uint16_t));
+	uint16_t *samples = (uint16_t *)calloc(num_samples, sizeof(uint16_t));
 	if (!samples) { free((void *)filename); return -1;}
 
 	/* when writing sounds remember these, db(data_bytes) is number_of_samples multiplied by the sizeof whatever type the samples are */
@@ -76,7 +76,7 @@ WavHeader createWav(uint32_t sr, uint16_t nc, uint16_t bps, uint32_t db)
 }
 
 void
-writeToWav(const struct WavHeader *wh, FILE *fd, const uint16_t *samples_data, size_t sample_rate)
+writeToWav(const struct WavHeader *wh, FILE *fd, const uint16_t *samples_data, size_t num_samples)
 {
 	/* this is a default writer that writes 2 seconds of silence into the .wav file*/
 	size_t bytes_per_sample = wh->bitsPerSample / 8;
