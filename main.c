@@ -7,20 +7,33 @@
 int
 main(int argc, char *argv[])
 {
-	char *filename = (char *)malloc(sizeof(char) * 128);
+	char *filename = (char *)malloc(128 * sizeof(char));
+	if (!filename) return -1;
+
 	/* if the user didn't pass a name */
-	if (argc < 2)
+	strcpy(filename, "music");
+	/* else */
+	if (argc > 1 && strcmp(argv[1], "-o") == 0)
 	{
-		strcpy(filename, "music");
-	} else if (strcmp(argv[1], "-o") == 0 && argv[2] == NULL){
-		fprintf(stderr, "Enter a valid music filename\n");
-		return -1;
+		if (argc < 3 || argv[2] == NULL)
+		{
+			fprintf(stderr, "Enter a valid music filename\n");
+			return -1;
+		}
+
+		strncpy(filename, argv[2], 127);
+		filename[127] = '\0';
 	}
 
-	strcpy(filename, argv[2]);
 	FILE *wav = fopen(filename, "w");
+	if (!wav)
+	{
+		fprintf(stderr, "Failed to open file. \n");
+		return -1;
+	}
 	fprintf(wav, "Hello World\n");
 	fclose(wav);
+
 	free(filename);
 	return 0;
 }
