@@ -25,12 +25,30 @@ main(int argc, char *argv[])
 		strncpy(filename, argv[2], 127);
 		filename[127] = '\0';
 	}
+	/* defaults */
+	int wave_type = 1;
+	float freq = 440.0f;
+	float duration = 2.0f;
+
+	printf("=====MSOUND======\n");
+	printf("Select waveform shape:\n");
+	printf("1. Sine Wave\n2. Square Wave\n3. Sawtooth Wave\n4. Triangle Wave\n");
+	printf("Choice: ");
+	if (scanf("%d", &wave_type) != 1 || wave_type < 1 || wave_type > 4) 
+	{
+		printf("\tDefault picked = 1\n");
+		wave_type = 1;
+	}
+	printf("Enter Frequency in Hz (eg. 440 for A4 and 261.63 for C4): ");
+	if (scanf("%f", &freq) != 1 || freq <= 0) freq = 440.0f;
+	printf("Enter Duration in Seconds(float): ");
+	if (scanf("%f", &duration) != 1 || duration <= 0) duration = 2.0f;
 
 	uint32_t sample_rate = 44100;
-	size_t num_samples = sample_rate * 1;
-	uint32_t data_bytes = (uint32_t)(num_samples * sizeof(uint16_t));
+	size_t num_samples = (size_t)sample_rate * duration;
+	uint32_t data_bytes = (uint32_t)(num_samples * sizeof(int16_t));
 
-	uint16_t *samples = (uint16_t *)calloc(num_samples, sizeof(uint16_t));
+	int16_t *samples = (int64_t *)malloc(data_bytes);
 	if (!samples) { free((void *)filename); return -1;}
 
 	/* when writing sounds remember these, db(data_bytes) is number_of_samples multiplied by the sizeof whatever type the samples are */
