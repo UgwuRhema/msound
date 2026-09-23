@@ -11,13 +11,13 @@ main(int argc, char *argv[])
 	if (!filename) return -1;
 
 	/* if the user didn't pass a name */
-	strcpy(filename, "music");
+	strcpy(filename, "music.wav");
 	/* else */
 	if (argc > 1 && strcmp(argv[1], "-o") == 0)
 	{
 		if (argc < 3 || argv[2] == NULL)
 		{
-			fprintf(stderr, "Enter a valid music filename\n");
+			fprintf(stderr, "Enter a valid music filename that ends with .wav\n");
 			return -1;
 		}
 
@@ -26,7 +26,16 @@ main(int argc, char *argv[])
 	}
 
 	struct WavHeader *wav_header = (struct WavHeader *)malloc(sizeof(struct WavHeader));
-	printf("size of WavHeader = %zu\n", sizeof(struct WavHeader));
+	struct Fool *fool = (struct Fool *)malloc(sizeof(struct Fool));
+	/* the .wav file creation, pretty easy right? */
+	FILE *fd = fopen(filename, "wb+");
+	if (!fd) return -1;
+
+	/* this should be how it's done right?*/
+	fwrite(fool, sizeof(fool), 1, fd);
+
+	fclose(fd);
+	free((void *)fool);
 	free((void *)wav_header);
 	free((void *)filename);
 	return 0;

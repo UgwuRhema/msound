@@ -20,3 +20,11 @@ struct __attribute__((packed)) WavHeader
 };
 
 /* the complete header every .wav file must have */
+
+/* ignore this struct */
+struct Fool
+{
+	char data[10];
+	int alias;
+};
+
