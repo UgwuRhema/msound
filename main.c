@@ -18,6 +18,7 @@ main(int argc, char *argv[])
 		if (argc < 3 || argv[2] == NULL)
 		{
 			fprintf(stderr, "Enter a valid music filename that ends with .wav\n");
+			free((void *)filename);
 			return -1;
 		}
 
@@ -25,17 +26,25 @@ main(int argc, char *argv[])
 		filename[127] = '\0';
 	}
 
+	uint32_t sample_rate = 44100;
+	size_t num_samples = sample_rate * 1;
+	uint32_t data_bytes = (uint32_t)(num_samples * sizeof(uint16_t));
+
+	uint16_t *samples = (uint64_t *)calloc(num_samples, sizeof(uint16_t));
+	if (!samples) { free((void *)filename); return -1;}
+
 	/* when writing sounds remember these, db(data_bytes) is number_of_samples multiplied by the sizeof whatever type the samples are */
 	/* have a definite duration, for example 2 seconds */
 	/* number_of_samples is sample_rate(normally 44100 by def) multiplied by the duration in seconds */
-	struct WavHeader wav_header = createWav(44100, 1, 16, (44100 * sizeof(uint16_t)));
+	struct WavHeader wav_header = createWav(sample_rate, 1, 16, data_bytes);
 	/* the .wav file creation, pretty easy right? */
 	FILE *fd = fopen(filename, "wb+");
-	if (!fd) return -1;
+	if (!fd) {free((void *)filename);return -1;}
 
 	/* this should be how it's done right?*/
 	fwrite(&wav_header, sizeof(wav_header), 1, fd);
-
+	/* let's write the samples, 1 second of absolute silence */
+	writeToWav(&wav_header, fd, samples, num_samples);
 	fclose(fd);
 	free((void *)filename);
 	return 0;
@@ -67,8 +76,9 @@ WavHeader createWav(uint32_t sr, uint16_t nc, uint16_t bps, uint32_t db)
 }
 
 void
-writeToWav(struct WavHeader *wh, FILE *fd, unsigned long num_samples, uint16_t *samples_data, int sample_rate)
+writeToWav(const struct WavHeader *wh, FILE *fd, const uint16_t *samples_data, size_t sample_rate)
 {
 	/* this is a default writer that writes 2 seconds of silence into the .wav file*/
-	fwrite(samples_data, wh->bitsPerSample / 8, num_samples, fd);
+	size_t bytes_per_sample = wh->bitsPerSample / 8;
+	fwrite(samples_data, bytes_per_sample, num_samples, fd);
 }

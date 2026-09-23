@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stddef.h>
 
 struct __attribute__((packed)) WavHeader
 {
@@ -29,4 +30,4 @@ struct Fool
 };
 
 struct WavHeader createWav(uint32_t, uint16_t, uint16_t, uint32_t);
-void writeToWav(struct WavHeader *, FILE *, unsigned long, uint16_t *, int);
+void writeToWav(const struct WavHeader *, FILE *, const uint16_t *, size_t);
