@@ -48,7 +48,7 @@ WavHeader createWav(uint32_t sr, uint16_t nc, uint16_t bps, uint32_t db)
 	struct WavHeader header;
 	memcpy(header.RIFF, "RIFF", 4);
 	memcpy(header.WAVE, "WAVE", 4);
-	memcpy(header.fmt, "fmt", 4);
+	memcpy(header.fmt, "fmt ", 4);
 	memcpy(header.Subchunk2ID, "data", 4);
 	/*fixed PCM parameters */
 	header.Subchunk1Size = 16; /* standard size for PCM as i discovered */
