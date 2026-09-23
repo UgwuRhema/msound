@@ -51,20 +51,25 @@ main(int argc, char *argv[])
 	int16_t *samples = (int16_t *)malloc(data_bytes);
 	if (!samples) { free((void *)filename); return -1;}
 
+	/* let's make the sample now */
+	generateSamples(samples, num_samples, sample_rate, freq, wave_type);
+
 	/* when writing sounds remember these, db(data_bytes) is number_of_samples multiplied by the sizeof whatever type the samples are */
 	/* have a definite duration, for example 2 seconds */
 	/* number_of_samples is sample_rate(normally 44100 by def) multiplied by the duration in seconds */
 	struct WavHeader wav_header = createWav(sample_rate, 1, 16, data_bytes);
 	/* the .wav file creation, pretty easy right? */
 	FILE *fd = fopen(filename, "wb+");
-	if (!fd) {free((void *)filename);return -1;}
+	if (!fd) {free((void *)samples);free((void *)filename);return -1;}
 
 	/* this should be how it's done right?*/
 	fwrite(&wav_header, sizeof(wav_header), 1, fd);
 	/* let's write the samples, 1 second of absolute silence */
 	writeToWav(&wav_header, fd, samples, num_samples);
+
 	fclose(fd);
 	free((void *)samples);
+	fprintf(stdout, "Made %s and it is (%u bytes), do the math yourself\n", filename, data_bytes + 44);
 	free((void *)filename);
 	return 0;
 }
