@@ -26,16 +26,14 @@ main(int argc, char *argv[])
 	}
 
 	struct WavHeader *wav_header = (struct WavHeader *)malloc(sizeof(struct WavHeader));
-	struct Fool *fool = (struct Fool *)malloc(sizeof(struct Fool));
 	/* the .wav file creation, pretty easy right? */
 	FILE *fd = fopen(filename, "wb+");
 	if (!fd) return -1;
 
 	/* this should be how it's done right?*/
-	fwrite(fool, sizeof(fool), 1, fd);
+	fwrite(wav_header, sizeof(wav_header), 1, fd);
 
 	fclose(fd);
-	free((void *)fool);
 	free((void *)wav_header);
 	free((void *)filename);
 	return 0;
