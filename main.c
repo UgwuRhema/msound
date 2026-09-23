@@ -48,7 +48,7 @@ main(int argc, char *argv[])
 	size_t num_samples = (size_t)sample_rate * duration;
 	uint32_t data_bytes = (uint32_t)(num_samples * sizeof(int16_t));
 
-	int16_t *samples = (int64_t *)malloc(data_bytes);
+	int16_t *samples = (int16_t *)malloc(data_bytes);
 	if (!samples) { free((void *)filename); return -1;}
 
 	/* when writing sounds remember these, db(data_bytes) is number_of_samples multiplied by the sizeof whatever type the samples are */
@@ -95,9 +95,37 @@ WavHeader createWav(uint32_t sr, uint16_t nc, uint16_t bps, uint32_t db)
 }
 
 void
-writeToWav(const struct WavHeader *wh, FILE *fd, const uint16_t *samples_data, size_t num_samples)
+writeToWav(const struct WavHeader *wh, FILE *fd, const int16_t *samples_data, size_t num_samples)
 {
 	/* this is a default writer that writes 2 seconds of silence into the .wav file*/
 	size_t bytes_per_sample = wh->bitsPerSample / 8;
 	fwrite(samples_data, bytes_per_sample, num_samples, fd);
+}
+
+void generateSamples(int16_t *samples, size_t num_samples, uint32_t sample_rate, float freq, int wave_type)
+{
+	for (size_t i = 0; i < num_samples; i++)
+	{
+		double t = (double)i / sample_rate;
+		double phase = fmod(freq * t, 1.0); /* Phase progression between 0.0 and 1.0 */
+
+		switch (wave_type)
+		{
+			case 1: /* Sine Wave */
+				samples[i] = (int16_t)(AMPLITUDE * sin(2.0 * M_PI * freq * t));
+				break;
+			case 2: /* Square Wave */
+				samples[i] = (int16_t)(sin(2.0 * M_PI * freq * t) >= 0 ? AMPLITUDE : -AMPLITUDE);
+				break;
+			case 3: /* Sawtooth Wave */
+				samples[i] = (int16_t)(AMPLITUDE * (2.0 * phase - 1.0));
+				break;
+			case 4: /* Triangle Wave */
+				samples[i] = (int16_t)(AMPLITUDE * (2.0 * fabs(2.0 * phase - 1.0) - 1.0));
+				break;
+			default:
+				samples[i] = 0;
+				break;
+		}
+	}
 }

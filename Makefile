@@ -10,7 +10,7 @@ all:
 
 make:
 	$(C) $(CFLAGS) $(F) -c $(F_O)
-	$(C) -o $(O) $(F_O)
+	$(C) -o $(O) $(F_O) -lm
 
 clean:
 	rm -rf $(F_O) $(O)

@@ -1,5 +1,15 @@
+#ifndef MAIN_H
+#define MAIN_H
+
 #include <stdint.h>
 #include <stddef.h>
+#include <math.h>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+#define AMPLITUDE 16000 /* approx 50% volume */
 
 struct __attribute__((packed)) WavHeader
 {
@@ -30,4 +40,7 @@ struct Fool
 };
 
 struct WavHeader createWav(uint32_t, uint16_t, uint16_t, uint32_t);
-void writeToWav(const struct WavHeader *, FILE *, const uint16_t *, size_t);
+void writeToWav(const struct WavHeader *, FILE *, const int16_t *, size_t);
+void generateSamples(int16_t *, size_t, uint32_t, float, int);
+
+#endif
