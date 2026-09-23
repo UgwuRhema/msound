@@ -31,7 +31,7 @@ main(int argc, char *argv[])
 	if (!fd) return -1;
 
 	/* this should be how it's done right?*/
-	fwrite(wav_header, sizeof(wav_header), 1, fd);
+	fwrite(wav_header, sizeof(struct WavHeader), 1, fd);
 
 	fclose(fd);
 	free((void *)wav_header);
